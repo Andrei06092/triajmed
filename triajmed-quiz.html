@@ -440,6 +440,55 @@
     .q-card, .q-result { padding: 1.5rem; }
     .modal { padding: 1.5rem; }
   }
+
+  /* ── CITY SELECTOR ── */
+  .city-selector-wrap {
+    margin-bottom: 1.4rem;
+  }
+  .city-selector-label {
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin-bottom: 0.6rem;
+  }
+  .city-selector-box {
+    position: relative;
+  }
+  .city-selector {
+    width: 100%; padding: 0.85rem 2.8rem 0.85rem 1.1rem;
+    background: rgba(255,255,255,0.03);
+    border: 0.5px solid var(--accent-line);
+    border-radius: 12px; color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif; font-size: 0.92rem; font-weight: 500;
+    appearance: none; -webkit-appearance: none;
+    cursor: pointer; outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .city-selector:focus { border-color: var(--accent); background: var(--accent-glow); }
+  .city-selector option { background: #071A3E; color: var(--text-primary); }
+  .city-selector option:disabled { color: var(--text-muted); }
+  .city-selector-arrow {
+    position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
+    color: var(--accent); pointer-events: none;
+    display: flex; align-items: center;
+  }
+  .city-sector-divider {
+    display: flex; align-items: center; gap: 10px;
+    margin: 0 0 1.1rem;
+  }
+  .city-sector-divider::before,
+  .city-sector-divider::after {
+    content: ''; flex: 1; height: 0.5px; background: var(--border-subtle);
+  }
+  .city-sector-divider span {
+    font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-muted); white-space: nowrap;
+  }
+  .city-sectors-locked {
+    display: flex; align-items: center; gap: 10px;
+    padding: 1rem 1.2rem;
+    background: rgba(255,255,255,0.02); border: 0.5px solid var(--border-subtle);
+    border-radius: 12px; color: var(--text-muted);
+    font-size: 0.83rem; font-weight: 300;
+  }
 </style>
 </head>
 <body>
@@ -550,7 +599,9 @@ const qQuestions = [
       { icon: '🦴', text: 'Coloana lombară', sub: 'zona inferioară a spatelui' },
       { icon: '🔙', text: 'Coloana cervicală', sub: 'gât, ceafă' },
       { icon: '💪', text: 'Umăr', sub: 'luxații, rupturi, durere la ridicare' },
-      { icon: '🦶', text: 'Altă articulație', sub: 'șold, gleznă, cot' },
+      { icon: '🦴', text: 'Șold', sub: 'durere inghinală, laterală sau fesieră' },
+      { icon: '🦶', text: 'Gleznă', sub: 'entorse, durere perimalleolară' },
+      { icon: '🦾', text: 'Cot', sub: 'epicondilită, durere la flexie/extensie' },
     ]
   },
   {
@@ -609,9 +660,9 @@ const qQuestions = [
     ]
   },
   {
-    id: 'sector', multi: false,
-    text: 'În ce sector din București te poți prezenta?',
-    sub: 'Îți vom arăta clinici disponibile în zona ta.',
+    id: 'sector', multi: false, cityStep: true,
+    text: 'În ce oraș te poți prezenta?',
+    sub: 'Selectează orașul, apoi sectorul sau zona ta.',
     options: [
       { icon: '1️⃣', text: 'Sector 1', sub: 'Floreasca, Aviatorilor, Dorobanți, Băneasa' },
       { icon: '2️⃣', text: 'Sector 2', sub: 'Colentina, Tei, Pantelimon, Iancului' },
@@ -718,6 +769,72 @@ function qRender() {
       container.appendChild(div);
     });
     document.getElementById('qNext').disabled = sel.size === 0;
+  } else if (q.cityStep) {
+    // ── City + sector picker ──
+    const cities = [
+      { value: 'bucuresti', label: 'București' },
+      { value: 'cluj',      label: 'Cluj-Napoca — în curând' },
+      { value: 'timisoara', label: 'Timișoara — în curând' },
+      { value: 'iasi',      label: 'Iași — în curând' },
+      { value: 'constanta', label: 'Constanța — în curând' },
+      { value: 'brasov',    label: 'Brașov — în curând' },
+    ];
+
+    const selectedCity = qAnswers['city'] || 'bucuresti';
+    const selectedSector = qAnswers[q.id];
+
+    container.innerHTML = `
+      <div class="city-selector-wrap">
+        <div class="city-selector-label">Oraș</div>
+        <div class="city-selector-box">
+          <select class="city-selector" id="cityDropdown">
+            ${cities.map(c => `<option value="${c.value}" ${c.value === selectedCity ? 'selected' : ''} ${c.value !== 'bucuresti' ? 'disabled' : ''}>${c.label}</option>`).join('')}
+          </select>
+          <div class="city-selector-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="city-sector-divider"><span>Sector</span></div>
+      <div id="sectorOptions"></div>`;
+
+    function renderSectors() {
+      const city = document.getElementById('cityDropdown').value;
+      qAnswers['city'] = city;
+      const sectorWrap = document.getElementById('sectorOptions');
+
+      if (city !== 'bucuresti') {
+        sectorWrap.innerHTML = `<div class="city-sectors-locked">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Clinicile pentru acest oraș vor fi disponibile în curând.
+        </div>`;
+        document.getElementById('qNext').disabled = true;
+        return;
+      }
+
+      sectorWrap.innerHTML = '';
+      q.options.forEach((opt, i) => {
+        const div = document.createElement('div');
+        div.className = 'q-option' + (selectedSector === i ? ' selected' : '');
+        div.innerHTML = `
+          <div class="q-option-icon">${opt.icon}</div>
+          <div>
+            <div class="q-option-text">${opt.text}</div>
+            ${opt.sub ? `<div class="q-option-sub">${opt.sub}</div>` : ''}
+          </div>`;
+        div.onclick = () => {
+          qAnswers[q.id] = i;
+          document.querySelectorAll('#sectorOptions .q-option').forEach((el, idx) => el.classList.toggle('selected', idx === i));
+          document.getElementById('qNext').disabled = false;
+        };
+        sectorWrap.appendChild(div);
+      });
+      document.getElementById('qNext').disabled = selectedSector === undefined;
+    }
+
+    renderSectors();
+    document.getElementById('cityDropdown').addEventListener('change', renderSectors);
+
   } else {
     q.options.forEach((opt, i) => {
       const div = document.createElement('div');
@@ -788,50 +905,247 @@ function qComputeResult() {
   let score = 0;
   score += mobility * 4;
   score += duration <= 1 ? 2 : 0;
-  score += Math.min(sympCount, 3);  // max 3pt din simptome
+  score += Math.min(sympCount, 3);
   if (trigger === 0) score += 4;
   if (mobility === 3) score += 2;
 
-  const zoneLabels = ['genunchi', 'coloana lombară', 'coloana cervicală', 'umăr', 'articulația afectată'];
-  const zoneName = zoneLabels[zone] || 'zona afectată';
+  // zone: 0=genunchi 1=lombar 2=cervical 3=umar 4=sold 5=glezna 6=cot
+  // trigger: 0=traumatism 1=sport 2=progresiv 3=recidiva
+  const isTrauma   = trigger === 0;
+  const isCervical = zone === 2;
 
-  // zone: 0=genunchi, 1=lombar, 2=cervical, 3=umar, 4=alta
-  // trigger: 0=traumatism, 1=sport, 2=progresiv, 3=recidiva
-  const isCervical  = zone === 2;
-  const isTrauma    = trigger === 0;
+  const zoneLabels = ['genunchi', 'coloana lombară', 'coloana cervicală', 'umăr', 'șold', 'gleznă', 'cot'];
+  const zoneName   = zoneLabels[zone] || 'zona afectată';
 
-  // Investigații dinamice în funcție de context clinic
-  function buildInvestig(baseList) {
-    let list = [...baseList];
-    // Cervicală → adaugă RMN cu mențiune neurologică
-    if (isCervical) {
-      list.push('RMN coloană cervicală — recomandat dacă există simptome neurologice asociate (amorțeală, furnicături, slăbiciune în membre)');
-    }
-    return list;
+  // ── Investigații specifice pe zonă ──────────────────────────────────────
+  // Fiecare zonă returnează un array de investigații pentru [trauma, non-trauma]
+  // Nivelul de urgență poate adăuga investigații suplimentare după
+
+  function investig(traumaList, nonTraumaList) {
+    return isTrauma ? traumaList : nonTraumaList;
   }
+
+  const zoneInvestig = {
+    // GENUNCHI
+    0: {
+      low: investig(
+        ['Radiografie genunchi față + profil — pentru a exclude o fractură sau fisură',
+         'CT genunchi — dacă radiografia nu e suficient de clară',
+         'RMN la indicația medicului — pentru tendoane, menisc și cartilaj'],
+        ['Radiografie genunchi față + profil — evaluare de bază',
+         'Ecografie genunchi — pentru lichid acumulat, tendoane și zone moi',
+         'RMN la indicația medicului — pentru menisc, cartilaj și ligamente']
+      ),
+      med: investig(
+        ['CT genunchi — prioritatea 1 după un traumatism, pentru oase și articulație',
+         'Radiografie față și profil — orientare inițială rapidă',
+         'RMN genunchi la indicația medicului — pentru ligamente, menisc, cartilaj'],
+        ['Radiografie genunchi față și profil (primul pas)',
+         'Ecografie genunchi — pentru tendoane, ligamente și lichid articular',
+         'RMN genunchi la indicația medicului — menisc, ligamente încrucișate',
+         'Analize de sânge dacă se suspectează o cauză inflamatorie: VSH (viteză de sedimentare a hematiilor), CRP (proteină C reactivă), FR (factor reumatoid), anti-CCP (anticorpi anti-peptid ciclic citrulinat)']
+      ),
+      high: investig(
+        ['CT genunchi de urgență — pentru fracturi, luxații sau leziuni osoase ascunse',
+         'Radiografie genunchi față + profil — dacă CT nu e disponibil imediat',
+         'RMN la indicația medicului, după stabilizare'],
+        ['Radiografie genunchi de urgență',
+         'CT genunchi dacă se suspectează o leziune osoasă complexă',
+         'Puncție articulară la indicația medicului dacă există sânge în articulație',
+         'RMN pentru evaluarea completă a structurilor moi']
+      ),
+    },
+    // COLOANA LOMBARĂ
+    1: {
+      low: investig(
+        ['Radiografie coloană lombară față + profil — evaluare după traumatism',
+         'CT lombar — dacă există suspiciune de fractură vertebrală',
+         'RMN lombar la indicația medicului, dacă apar simptome neurologice'],
+        ['Radiografie coloană lombară față + profil — evaluare de bază',
+         'RMN lombar la indicația medicului — pentru discuri și nervii coloanei']
+      ),
+      med: investig(
+        ['CT coloană lombară — pentru fracturi vertebrale (evaluare osoasă precisă)',
+         'Radiografie lombară față + profil — orientare inițială',
+         'RMN lombar la indicația medicului — pentru discuri, nervi și măduva spinării'],
+        ['Radiografie lombară față + profil (primul pas)',
+         'RMN coloană lombară — hernie de disc, îngustarea canalului, compresie nervoasă',
+         'Electromiografie (EMG) la indicația medicului dacă simți slăbiciune sau amorțeală în picioare',
+         'Analize de sânge dacă se suspectează o cauză inflamatorie: VSH (viteză de sedimentare a hematiilor), CRP (proteină C reactivă), FR (factor reumatoid), anti-CCP (anticorpi anti-peptid ciclic citrulinat)']
+      ),
+      high: investig(
+        ['CT lombar de urgență — excludere fractură vertebrală instabilă',
+         'Radiografie lombară de urgență — orientare rapidă',
+         'RMN lombar urgent dacă simți slăbiciune în membre sau pierdere de control vezical/intestinal'],
+        ['RMN coloană lombară de urgență — compresie nervoasă severă sau medulară',
+         'CT lombar dacă RMN nu e disponibil imediat',
+         'Consult neurochirurgical urgent dacă există slăbiciune în membre sau tulburări sfincteriene']
+      ),
+    },
+    // COLOANA CERVICALĂ
+    2: {
+      low: investig(
+        ['Radiografie coloană cervicală față + profil — excludere fractură sau instabilitate',
+         'CT cervical — recomandat dacă traumatismul a fost la viteză mare (accident auto)',
+         'RMN cervical la indicația medicului dacă ai amorțeală sau furnicături în brațe'],
+        ['Radiografie coloană cervicală față + profil — evaluare de bază',
+         'RMN coloană cervicală — hernie de disc, îngustarea canalului, compresie nervoasă',
+         'EMG membre superioare la indicația medicului dacă simți slăbiciune sau amorțeală în brațe']
+      ),
+      med: investig(
+        ['CT coloană cervicală — obligatoriu după traumatisme (fracturi, luxații, instabilitate)',
+         'Radiografie cervicală față + profil — orientare inițială',
+         'RMN cervical la indicația medicului — pentru discuri, nervi și măduva spinării'],
+        ['Radiografie cervicală față + profil (primul pas)',
+         'RMN coloană cervicală — hernie de disc, compresie nervoasă, afectarea măduvei',
+         'EMG membre superioare dacă simți slăbiciune sau amorțeală în brațe',
+         'Analize de sânge dacă se suspectează o cauză inflamatorie: VSH (viteză de sedimentare a hematiilor), CRP (proteină C reactivă), FR (factor reumatoid), anti-CCP (anticorpi anti-peptid ciclic citrulinat)']
+      ),
+      high: investig(
+        ['CT cervical de urgență — fractură instabilă sau luxație după traumatism sever',
+         'Radiografie cervicală de urgență — evaluare inițială rapidă',
+         'RMN cervical urgent dacă simți slăbiciune în membre, dificultăți la înghițit sau respirație'],
+        ['RMN coloană cervicală de urgență — compresie severă a măduvei spinării',
+         'CT cervical dacă RMN nu e disponibil și există suspiciune de leziune osoasă',
+         'Consult neurochirurgical urgent dacă există slăbiciune în brațe sau picioare']
+      ),
+    },
+    // UMĂR
+    3: {
+      low: investig(
+        ['Radiografie umăr față — pentru luxație sau fractură',
+         'CT umăr — dacă se suspectează o fractură mai complexă la nivelul articulației',
+         'RMN la indicația medicului — pentru tendoane și structurile moi ale umărului'],
+        ['Radiografie umăr față — evaluare de bază',
+         'Ecografie umăr — pentru tendoanele umărului și lichidul articular',
+         'RMN umăr la indicația medicului — pentru rupturi tendinoase sau cartilaj']
+      ),
+      med: investig(
+        ['CT umăr — prioritatea 1 pentru luxații și fracturi complexe',
+         'Radiografie umăr față + vedere axilară — orientare completă',
+         'RMN la indicația medicului — pentru tendoane, cartilaj și ligamente'],
+        ['Radiografie umăr față + vedere axilară (primul pas)',
+         'Ecografie umăr — pentru tendoanele umărului și lichidul articular',
+         'RMN umăr la indicația medicului — rupturi tendinoase, sindrom de impingement',
+         'Analize de sânge dacă se suspectează o cauză inflamatorie: VSH (viteză de sedimentare a hematiilor), CRP (proteină C reactivă)']
+      ),
+      high: investig(
+        ['Radiografie umăr de urgență — luxație sau fractură',
+         'CT umăr de urgență — fracturi complexe, pregătire pentru intervenție',
+         'RMN la indicația medicului după reducerea luxației — pentru ligamente și structuri moi'],
+        ['Radiografie umăr de urgență',
+         'Ecografie umăr de urgență — ruptură acută de tendon',
+         'RMN umăr dacă durerea este foarte intensă și limitează complet mișcarea',
+         'Consult ortoped pentru decizie chirurgicală dacă se confirmă ruptură totală de tendon']
+      ),
+    },
+    // ȘOLD
+    4: {
+      low: investig(
+        ['Radiografie șold și bazin — pentru a exclude o fractură de col femural',
+         'CT șold — obligatoriu dacă radiografia e normală și durerea persistă (fracturi ascunse)',
+         'RMN șold la indicația medicului — necroză avasculară cap femural, structuri moi'],
+        ['Radiografie bazin față + șold afectat — artroză, necroză avasculară',
+         'Ecografie șold — lichid în articulație, tendoane',
+         'RMN șold la indicația medicului — necroză avasculară cap femural',
+         'Analize de sânge dacă se suspectează o cauză inflamatorie: VSH (viteză de sedimentare a hematiilor), CRP (proteină C reactivă), FR (factor reumatoid)']
+      ),
+      med: investig(
+        ['CT șold — prioritatea 1 după traumatism (fractură col femural, luxație)',
+         'Radiografie șold față — orientare inițială',
+         'RMN șold la indicația medicului — necroză avasculară, structuri moi'],
+        ['Radiografie bazin + șold față (primul pas)',
+         'RMN șold — necroză avasculară cap femural (mai sensibil decât radiografia)',
+         'Ecografie șold — lichid în articulație, tendoane',
+         'Analize de sânge dacă se suspectează o cauză inflamatorie: VSH (viteză de sedimentare a hematiilor), fibrinogen, CRP (proteină C reactivă), FR (factor reumatoid), anti-CCP (anticorpi anti-peptid ciclic citrulinat)']
+      ),
+      high: investig(
+        ['CT șold de urgență — fractură col femural sau luxație traumatică (risc necroză avasculară)',
+         'Radiografie șold de urgență — orientare inițială rapidă',
+         'Consult ortoped urgent — luxația de șold trebuie redusă în maxim 6 ore'],
+        ['Radiografie șold de urgență',
+         'RMN șold de urgență dacă se suspectează necroză avasculară acută sau fractură ascunsă',
+         'CT șold dacă RMN nu e disponibil',
+         'Consult ortoped sau reumatolog pentru tratament imediat']
+      ),
+    },
+    // GLEZNĂ
+    5: {
+      low: investig(
+        ['Radiografie gleznă față + profil — pentru a exclude o fractură',
+         'Radiografie picior dacă durerea e mai ales la nivelul degetelor sau labei piciorului',
+         'CT gleznă — dacă radiografia e normală și durerea persistă'],
+        ['Radiografie gleznă față + profil — evaluare de bază',
+         'Ecografie gleznă — pentru ligamente, tendon Achile și zone moi',
+         'RMN gleznă la indicația medicului — pentru leziuni tendinoase sau cartilaj']
+      ),
+      med: investig(
+        ['Radiografie gleznă față + profil — fractură la nivelul gleznei sau instabilitate',
+         'CT gleznă — dacă se suspectează o fractură complexă sau afectarea articulației',
+         'RMN gleznă la indicația medicului — ligamente, tendoane, cartilaj'],
+        ['Radiografie gleznă față + profil (primul pas)',
+         'Ecografie gleznă — pentru ligamentele laterale, tendon Achile',
+         'RMN gleznă la indicația medicului — entorse severe, leziuni de cartilaj',
+         'Analize de sânge dacă se suspectează gută sau artropatie: VSH (viteză de sedimentare a hematiilor), CRP (proteină C reactivă), acid uric']
+      ),
+      high: investig(
+        ['Radiografie gleznă de urgență față + profil',
+         'CT gleznă de urgență — fracturi complexe sau luxație',
+         'RMN după stabilizare dacă se suspectează leziuni severe de ligamente sau tendoane'],
+        ['Radiografie gleznă de urgență',
+         'Ecografie gleznă de urgență — ruptură de tendon Achile (semn Thompson)',
+         'RMN gleznă dacă se confirmă ruptură tendinoasă sau leziune severă de cartilaj',
+         'Consult ortoped urgent — ruptură totală tendon Achile sau fractură cu deplasare']
+      ),
+    },
+    // COT
+    6: {
+      low: investig(
+        ['Radiografie cot față + profil — pentru a exclude o fractură',
+         'CT cot — dacă radiografia e normală și mecanismul sugerează o fractură ascunsă',
+         'RMN la indicația medicului — pentru ligamente și tendoane'],
+        ['Radiografie cot față + profil — evaluare de bază',
+         'Ecografie cot — pentru epicondilită laterală ("cot de tenis") sau medială ("cot de golf")',
+         'RMN cot la indicația medicului — pentru ligamente, tendoane sau corpi liberi articulari']
+      ),
+      med: investig(
+        ['Radiografie cot față + profil (primul pas)',
+         'CT cot — mai precis decât radiografia pentru fracturi la nivelul articulației',
+         'RMN cot la indicația medicului — pentru ligamente și instabilitate'],
+        ['Radiografie cot față + profil (primul pas)',
+         'Ecografie cot — epicondilită laterală sau medială, tendoane',
+         'RMN cot la indicația medicului — pentru ligamente și nervi',
+         'Analize de sânge dacă se suspectează gută sau artropatie: VSH (viteză de sedimentare a hematiilor), CRP (proteină C reactivă), acid uric']
+      ),
+      high: investig(
+        ['Radiografie cot de urgență față + profil — luxație sau fractură',
+         'CT cot de urgență — fracturi complexe, pregătire pentru intervenție',
+         'RMN la indicația medicului după reducerea luxației — pentru ligamente'],
+        ['Radiografie cot de urgență',
+         'CT cot dacă se suspectează fractură ascunsă sau corp liber articular blocat',
+         'Consult ortoped urgent — luxația de cot trebuie redusă sub anestezie']
+      ),
+    },
+  };
+
+  // ──────────────────────────────────────────────────────────────────────────
+
+  let level, badge, title, context, urgencyWindow, recNow, recInvestig;
+
+  const urgencyKey = score <= 5 ? 'low' : score <= 13 ? 'med' : 'high';
+  recInvestig = (zoneInvestig[zone] && zoneInvestig[zone][urgencyKey]) ? zoneInvestig[zone][urgencyKey] : [];
 
   if (score <= 5) {
     level = 'low'; badge = '🟢 Urgență scăzută';
     urgencyWindow = 'Poți consulta un medic în 2–3 săptămâni.';
-    title = 'Situația pare stabilă momentan';
-    context = `Pe baza datelor tale, simptomele la nivelul ${zoneName} nu indică o urgență imediată. ${urgencyWindow}`;
+    title = 'Recomandăm un consult ortopedic în următoarele săptămâni';
+    context = `Pe baza datelor tale, simptomele la nivelul ${zoneName} nu necesită prezentare de urgență — însă un consult ortopedic rămâne recomandat pentru a exclude orice problemă latentă. ${urgencyWindow}`;
     recNow = [
       'Evită suprasolicitarea zonei afectate',
       'Aplică gheață local 15–20 min de 2–3 ori/zi dacă ajută',
-      'Antiinflamatoare OTC la nevoie (ibuprofen, cu mâncare)',
+      'Antiinflamatoare OTC (fără rețetă) la nevoie (ibuprofen, cu mâncare)',
       'Programează consult ortopedic fără urgență maximă',
     ];
-    recInvestig = buildInvestig(
-      isTrauma ? [
-        'CT articular — investigația de elecție pentru fracturi și luxații (densitate osoasă superioară)',
-        'Radiografie — util ca primă orientare dacă CT nu e imediat disponibil',
-        'RMN doar la indicația medicului, după excluderea leziunilor osoase',
-      ] : [
-        'Radiografie a zonei afectate (primul pas, accesibil)',
-        'Ecografie articulară sau tendinoasă',
-        'RMN doar la indicația medicului',
-      ]
-    );
   } else if (score <= 13) {
     level = 'med'; badge = '🟡 Urgență moderată';
     urgencyWindow = 'Recomandăm consult în această săptămână — nu amâna mai mult de 3–5 zile.';
@@ -843,18 +1157,6 @@ function qComputeResult() {
       'Prezintă-te la un medic ortoped în 3–5 zile',
       'Dacă apar semne noi (umflătură rapidă, febră) → mergi urgent',
     ];
-    recInvestig = buildInvestig(
-      isTrauma ? [
-        'CT articular — prioritatea 1 pentru evaluarea structurii osoase și excluderea fracturilor/luxațiilor',
-        'Radiografie de față și profil — complementară sau dacă CT nu e disponibil imediat',
-        'RMN la indicația medicului (ligamente, cartilaj, țesuturi moi)',
-      ] : [
-        'Radiografie de față și profil (obligatoriu)',
-        'Ecografie articulară sau tendinoasă',
-        'RMN la indicația medicului (ligamente, cartilaj)',
-        'Analize inflamatorii dacă se suspectează cauză reumatologică: VSH, fibrinogen, proteină C reactivă (CRP), și la indicația medicului autoanticorpi accesibili (FR — factor reumatoid, anti-CCP)',
-      ]
-    );
   } else {
     level = 'high'; badge = '🔴 Urgență ridicată';
     urgencyWindow = 'Prezintă-te la un specialist astăzi sau cel târziu mâine.';
@@ -866,18 +1168,6 @@ function qComputeResult() {
       isTrauma ? 'Traumatism recent → excludere fractură/luxație obligatorie — nu amâna' : 'Evită orice activitate fizică până la evaluare',
       'Dacă ai pierdere de sensibilitate sau forță musculară → urgențe imediat',
     ];
-    recInvestig = buildInvestig(
-      isTrauma ? [
-        'CT de urgență — investigația de elecție pentru fracturi și luxații (vizualizare osoasă superioară)',
-        'Radiografie de urgență — dacă CT nu e disponibil imediat',
-        'RMN doar la indicația medicului, după excluderea leziunilor osoase',
-      ] : [
-        'Radiografie de urgență',
-        'CT — recomandat dacă se suspectează leziune osoasă complexă',
-        'RMN la indicația medicului pentru evaluarea țesuturilor moi',
-        'Consult neurologic dacă există simptome neurologice asociate',
-      ]
-    );
   }
 
   return { level, badge, title, context, recNow, recInvestig };
@@ -938,7 +1228,7 @@ function dismissHelp() {
 
 function buildLeadSummary() {
   const r = qComputeResult();
-  const zoneLabels = ['Genunchi', 'Coloana lombară', 'Coloana cervicală', 'Umăr', 'Altă articulație'];
+  const zoneLabels = ['Genunchi', 'Coloana lombară', 'Coloana cervicală', 'Umăr', 'Șold', 'Gleznă', 'Cot'];
   const durationLabels = ['Sub 48 ore', '2–7 zile', '1–4 săptămâni', 'Peste o lună'];
   const triggerLabels = ['Traumatism/accident', 'Efort fizic/sport', 'Apărut progresiv', 'Recidivă'];
   const mobilityLabels = ['Funcționez normal', 'Activitate parțial limitată', 'Limitare severă', 'Durere în repaus/nocturnă'];
@@ -1063,7 +1353,9 @@ function renderClinicsBySelectedSector() {
 
   function renderCard(c) {
     const bookingBtn = c.booking
-      ? `<a class="clinic-map-btn" href="${c.booking}" target="_blank" style="background:rgba(0,201,141,0.08);border-color:rgba(0,201,141,0.3);color:#00C98D;">${calIcon} Programare ortopedie</a>`
+      ? `<a class="clinic-map-btn" href="${c.booking}" target="_blank"
+           onclick="trackClinicClick('${c.name.replace(/'/g,"\\'")}', ${sectorNum})"
+           style="background:rgba(0,201,141,0.08);border-color:rgba(0,201,141,0.3);color:#00C98D;">${calIcon} Programare ortopedie</a>`
       : '';
     return `
       <div class="clinic-card">
@@ -1122,6 +1414,41 @@ function closeClinicsModal() {
 document.getElementById('clinicsModal').addEventListener('click', function(e) {
   if (e.target === this) closeClinicsModal();
 });
+
+// ── Clinic click tracking ──
+
+async function trackClinicClick(clinicName, sector) {
+  // 1) GA4 custom event — apare în GA > Events ca "clinic_booking_click"
+  if (typeof gtag === 'function') {
+    gtag('event', 'clinic_booking_click', {
+      clinic_name: clinicName,
+      sector: sector,
+      zona: qAnswers['zone'] !== undefined
+        ? ['Genunchi','Coloana lombară','Coloana cervicală','Umăr','Șold','Gleznă','Cot'][qAnswers['zone']]
+        : 'necunoscut',
+    });
+  }
+
+  // 2) Make webhook — loghează în Google Sheet > TriajMed Leads
+  try {
+    await fetch('https://hook.eu1.make.com/jj2bctd4o1ho98qabn22v2x5hvnrljxt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tip_event: 'clinic_click',
+        clinica: clinicName,
+        sector: sector,
+        zona: qAnswers['zone'] !== undefined
+          ? ['Genunchi','Coloana lombară','Coloana cervicală','Umăr','Șold','Gleznă','Cot'][qAnswers['zone']]
+          : 'necunoscut',
+        urgenta: qComputeResult ? qComputeResult().badge : '—',
+        data: new Date().toLocaleString('ro-RO'),
+      })
+    });
+  } catch(e) {
+    // silently fail — nu blocăm utilizatorul
+  }
+}
 
 qRender();
 </script>
