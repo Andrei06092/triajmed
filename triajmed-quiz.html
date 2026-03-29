@@ -451,7 +451,7 @@
   </div>
 
   <div class="q-progress-wrap">
-    <div class="q-progress-fill" id="qProgress" style="width:16%"></div>
+    <div class="q-progress-fill" id="qProgress" style="width:14%"></div>
   </div>
 
   <!-- QUIZ CARD -->
@@ -523,75 +523,13 @@
 <div class="modal-overlay" id="clinicsModal">
   <div class="modal">
     <button class="modal-close" onclick="closeClinicsModal()">✕</button>
-    <div class="modal-title">Opțiuni de clinici · București</div>
+    <div class="modal-title" id="modalSectorTitle">Opțiuni de clinici · București</div>
     <div class="modal-subtitle">Informații orientative bazate pe date publice. Nu reprezintă o recomandare din partea TriajMed.</div>
     <div class="modal-disclaimer">
       <strong>Disclaimer:</strong> TriajMed oferă aceste informații cu titlu <strong>strict orientativ</strong>. Nu avem parteneriate cu nicio clinică listată și nu garantăm calitatea serviciilor. <strong>Alegerea clinicii aparține exclusiv pacientului.</strong>
     </div>
 
-    <div class="clinics-section-title">Ortopedie & Recuperare</div>
-    <div class="clinic-card">
-      <div class="clinic-header"><div class="clinic-name">Ortokinetic Pipera</div><div class="clinic-tag">Ortopedie · Recuperare</div></div>
-      <div class="clinic-info">
-        <span>📍 Șos. Pipera-Tunari nr. 58, Voluntari</span>
-        <span>🕐 Lun–Vin: 07:00–21:00 · Sâm: 09:00–14:00</span>
-        <span>🦴 Clinica de Genunchi & Șold · Radiologie digitală proprie</span>
-      </div>
-      <a class="clinic-map-btn" href="https://maps.google.com/?q=Ortokinetic+Pipera+Sos+Pipera-Tunari+58+Voluntari" target="_blank">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        Vezi pe hartă
-      </a>
-    </div>
-    <div class="clinic-card">
-      <div class="clinic-header"><div class="clinic-name">KINOMED</div><div class="clinic-tag">Ortopedie · Kinetoterapie</div></div>
-      <div class="clinic-info">
-        <span>📍 Str. Valeriu Braniște nr. 37–39, Sector 3</span>
-        <span>🕐 Lun–Vin: 07:30–21:00</span>
-        <span>🦴 Ortopedie, recuperare medicală, fizioterapie, neurologie</span>
-      </div>
-      <a class="clinic-map-btn" href="https://maps.google.com/?q=KINOMED+Str+Valeriu+Braniste+37+Bucuresti" target="_blank">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        Vezi pe hartă
-      </a>
-    </div>
-
-    <div class="clinics-section-title" style="margin-top:1.3rem">Imagistică (RMN · Radiografie)</div>
-    <div class="clinic-card">
-      <div class="clinic-header"><div class="clinic-name">Biomed Scan RMN</div><div class="clinic-tag">RMN · Imagistică</div></div>
-      <div class="clinic-info">
-        <span>📍 Str. Răcari nr. 6A, Sector 3</span>
-        <span>🕐 Lun–Vin: 07:00–21:00 · Sâm: 08:00–15:00</span>
-        <span>🔬 4 aparate RMN Siemens 1.5T & 3T · Decontare CAS disponibilă</span>
-      </div>
-      <a class="clinic-map-btn" href="https://maps.google.com/?q=Biomed+Scan+RMN+Str+Racari+6A+Bucuresti" target="_blank">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        Vezi pe hartă
-      </a>
-    </div>
-    <div class="clinic-card">
-      <div class="clinic-header"><div class="clinic-name">Clinica RMN Tineretului</div><div class="clinic-tag">RMN 3T · Imagistică</div></div>
-      <div class="clinic-info">
-        <span>📍 Zona Tineretului, București (Sector 4)</span>
-        <span>🕐 Lun–Vin: program standard</span>
-        <span>🔬 RMN 3 Tesla 2025 · ISO 9001 · Decontare CAS</span>
-      </div>
-      <a class="clinic-map-btn" href="https://maps.google.com/?q=Clinica+RMN+Tineretului+Bucuresti" target="_blank">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        Vezi pe hartă
-      </a>
-    </div>
-    <div class="clinic-card">
-      <div class="clinic-header"><div class="clinic-name">Clinica Medicală Pallady</div><div class="clinic-tag">RMN · Radiografie</div></div>
-      <div class="clinic-info">
-        <span>📍 Str. Victor Brauner nr. 34–38, Sector 3</span>
-        <span>🕐 Lun–Vin: 08:00–20:00 · Sâm: la disponibilitate</span>
-        <span>🔬 RMN 1.5T ortopedic · Radiografie · Programare rapidă · Decontare CAS</span>
-      </div>
-      <a class="clinic-map-btn" href="https://maps.google.com/?q=Clinica+Medicala+Pallady+Str+Victor+Brauner+34+Bucuresti" target="_blank">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        Vezi pe hartă
-      </a>
-    </div>
+    <div id="clinicsDynamicContent"></div>
 
     <div class="modal-divider"><span>Caută mai multe opțiuni</span></div>
     <div class="modal-search-tip">
@@ -670,7 +608,83 @@ const qQuestions = [
       { icon: '🆕', text: 'Prima dată — niciun consult anterior', sub: '' },
     ]
   },
+  {
+    id: 'sector', multi: false,
+    text: 'În ce sector din București te poți prezenta?',
+    sub: 'Îți vom arăta clinici disponibile în zona ta.',
+    options: [
+      { icon: '1️⃣', text: 'Sector 1', sub: 'Floreasca, Aviatorilor, Dorobanți, Băneasa' },
+      { icon: '2️⃣', text: 'Sector 2', sub: 'Colentina, Tei, Pantelimon, Iancului' },
+      { icon: '3️⃣', text: 'Sector 3', sub: 'Timpuri Noi, Vitan, Dristor, Pallady' },
+      { icon: '4️⃣', text: 'Sector 4', sub: 'Tineretului, Berceni, Brâncoveanu' },
+      { icon: '5️⃣', text: 'Sector 5', sub: 'Cotroceni, 13 Septembrie, Rahova' },
+      { icon: '6️⃣', text: 'Sector 6', sub: 'Militari, Drumul Taberei, Crângași' },
+    ]
+  },
 ];
+
+const clinicsDB = {
+  1: {
+    label: 'Sector 1 — Floreasca · Dorobanți · Aviatorilor',
+    clinics: [
+      { name: 'Medlife Grand', tag: 'Ortopedie · RMN · Recuperare', address: 'Calea Floreasca 14-16, Sector 1', hours: 'Lun–Vin: 07:00–21:00 · Sâm: 08:00–15:00', note: 'Spital privat · Ortopedie, recuperare medicală, imagistică', maps: 'Medlife+Grand+Calea+Floreasca+14+Bucuresti', booking: 'https://www.medlife.ro/programare-online' },
+      { name: 'Regina Maria Floreasca', tag: 'Ortopedie · Imagistică · Recuperare', address: 'Calea Floreasca 88-90, Sector 1', hours: 'Lun–Vin: 07:30–20:00', note: 'Ortopedie, RMN, CT, ecografie musculoscheletală', maps: 'Regina+Maria+Floreasca+Calea+Floreasca+Bucuresti', booking: 'https://www.reginamaria.ro/programare' },
+      { name: 'Medicover Calea Victoriei', tag: 'Ortopedie · Multidisciplinar', address: 'Calea Victoriei 145, Sector 1', hours: 'Lun–Vin: 08:00–20:00', note: 'Ortopedie, recuperare, fizioterapie, analize', maps: 'Medicover+Calea+Victoriei+145+Bucuresti', booking: 'https://programare.medicover.ro/solicitare-programare' },
+      { name: 'Clinica Zetta Dorobanți', tag: 'Ortopedie · Kinetoterapie', address: 'Calea Dorobanților 217, Sector 1', hours: 'Lun–Vin: 08:00–20:00', note: 'Ortopedie, kinetoterapie, recuperare post-traumatică', maps: 'Clinica+Zetta+Calea+Dorobantilor+Bucuresti', booking: null },
+      { name: 'OrthoCare Clinic', tag: 'Ortopedie · Traumatologie', address: 'Șos. Nicolae Titulescu 64, Sector 1', hours: 'Lun–Vin: 08:00–20:00', note: 'Clinică privată dedicată ortopediei și traumatologiei', maps: 'OrthoCare+Clinic+Sos+Nicolae+Titulescu+64+Bucuresti', booking: 'https://orthocareclinic.ro/contact/' },
+    ]
+  },
+  2: {
+    label: 'Sector 2 — Colentina · Tei · Iancului',
+    clinics: [
+      { name: 'Medlife Colentina', tag: 'Ortopedie · RMN · Recuperare', address: 'Șos. Colentina 2-4, Sector 2', hours: 'Lun–Vin: 07:00–21:00 · Sâm: 08:00–15:00', note: 'Ortopedie, recuperare medicală, RMN, analize', maps: 'Medlife+Colentina+Sos+Colentina+Bucuresti', booking: 'https://www.medlife.ro/programare-online' },
+      { name: 'Regina Maria Iancului', tag: 'Ortopedie · Imagistică', address: 'Bd. Decebal 22, Sector 2', hours: 'Lun–Vin: 07:30–20:00', note: 'Ortopedie, RMN, ecografie, recuperare', maps: 'Regina+Maria+Iancului+Bd+Decebal+Bucuresti', booking: 'https://www.reginamaria.ro/programare' },
+      { name: 'NORD — Grupul Medical Provita', tag: 'Ortopedie · Recuperare', address: 'Șos. Colentina 100, Sector 2', hours: 'Lun–Vin: 08:00–20:00', note: 'Ortopedie, recuperare medicală, fizioterapie', maps: 'NORD+Grupul+Medical+Provita+Colentina+Bucuresti', booking: 'https://nord.ro/programeaza-te/' },
+      { name: 'Medicover Obor', tag: 'Ortopedie · Multidisciplinar', address: 'Bd. Ferdinand I 96, Sector 2', hours: 'Lun–Vin: 08:00–20:00', note: 'Ortopedie, ecografie, recuperare, analize', maps: 'Medicover+Obor+Bd+Ferdinand+Bucuresti', booking: 'https://programare.medicover.ro/solicitare-programare' },
+      { name: 'Centrokinetic Barbu Văcărescu', tag: 'Ortopedie · Recuperare · Kinetoterapie', address: 'Str. Barbu Văcărescu 102, Sector 2', hours: 'Lun–Vin: 07:00–21:00 · Sâm: 08:00–14:00', note: 'Ortopedie, recuperare medicală, kinetoterapie, fizioterapie', maps: 'Centrokinetic+Barbu+Vacarescu+102+Bucuresti', booking: 'https://www.docbook.ro/clinici/clinica-centrokinetic-barbu-vacarescu-centrokinetic' },
+    ]
+  },
+  3: {
+    label: 'Sector 3 — Timpuri Noi · Vitan · Pallady',
+    clinics: [
+      { name: 'KINOMED', tag: 'Ortopedie · Kinetoterapie · Recuperare', address: 'Str. Valeriu Braniște 37-39, Sector 3', hours: 'Lun–Vin: 07:30–21:00', note: 'Ortopedie, recuperare medicală, fizioterapie, neurologie', maps: 'KINOMED+Str+Valeriu+Braniste+37+Bucuresti', booking: 'https://kinomed.ro/programare-online/' },
+      { name: 'Medlife Timpuri Noi', tag: 'Ortopedie · RMN · Recuperare', address: 'Bd. Corneliu Coposu 6-8, Sector 3', hours: 'Lun–Vin: 07:00–21:00 · Sâm: 08:00–15:00', note: 'Ortopedie, recuperare, imagistică, analize', maps: 'Medlife+Timpuri+Noi+Bd+Corneliu+Coposu+Bucuresti', booking: 'https://www.medlife.ro/programare-online' },
+      { name: 'Regina Maria Timpuri Noi', tag: 'Ortopedie · Imagistică', address: 'Bd. Unirii 68, Sector 3', hours: 'Lun–Vin: 07:30–20:00', note: 'Ortopedie, RMN, CT, ecografie musculoscheletală', maps: 'Regina+Maria+Timpuri+Noi+Bd+Unirii+Bucuresti', booking: 'https://www.reginamaria.ro/programare' },
+      { name: 'Clinica Medicală Pallady', tag: 'RMN · Radiografie · Ortopedie', address: 'Str. Victor Brauner 34-38, Sector 3', hours: 'Lun–Vin: 08:00–20:00', note: 'RMN 1.5T ortopedic · Radiografie · Programare rapidă · Decontare CAS', maps: 'Clinica+Medicala+Pallady+Str+Victor+Brauner+34+Bucuresti', booking: 'https://clinica-pallady.ro/contacteaza-clinica-medicala-pallady/' },
+      { name: 'Biomed Scan RMN', tag: 'RMN · CT · Imagistică', address: 'Str. Răcari 6A, Sector 3', hours: 'Lun–Vin: 07:00–21:00 · Sâm: 08:00–15:00', note: '4 aparate RMN Siemens 1.5T & 3T · Decontare CAS disponibilă', maps: 'Biomed+Scan+RMN+Str+Racari+6A+Bucuresti', booking: null, imagingOnly: true },
+    ]
+  },
+  4: {
+    label: 'Sector 4 — Tineretului · Berceni · Brâncoveanu',
+    clinics: [
+      { name: 'Medlife Berceni', tag: 'Ortopedie · RMN · Recuperare', address: 'Șos. Berceni 12, Sector 4', hours: 'Lun–Vin: 07:00–21:00 · Sâm: 08:00–15:00', note: 'Ortopedie, recuperare medicală, imagistică, analize', maps: 'Medlife+Berceni+Sos+Berceni+Bucuresti', booking: 'https://www.medlife.ro/programare-online' },
+      { name: 'Regina Maria Berceni', tag: 'Ortopedie · Imagistică', address: 'Șos. Berceni 10, Sector 4', hours: 'Lun–Vin: 07:30–20:00', note: 'Ortopedie, RMN, CT, ecografie', maps: 'Regina+Maria+Berceni+Sos+Berceni+Bucuresti', booking: 'https://www.reginamaria.ro/programare' },
+      { name: 'Medicover Brâncoveanu', tag: 'Ortopedie · Recuperare', address: 'Calea Brâncoveanu 32, Sector 4', hours: 'Lun–Vin: 08:00–20:00', note: 'Ortopedie, fizioterapie, recuperare, analize', maps: 'Medicover+Calea+Brancovenanu+Bucuresti', booking: 'https://programare.medicover.ro/solicitare-programare' },
+      { name: 'NovaLife', tag: 'Ortopedie · Traumatologie', address: 'Str. Izvorul Rece 12, Sector 4', hours: 'Lun–Vin: 08:00–20:00', note: 'Ortopedie, traumatologie · Decontare CNAS disponibilă', maps: 'NovaLife+Str+Izvorul+Rece+12+Bucuresti', booking: 'https://novalife.ro/programare-online/' },
+      { name: 'Clinica RMN Tineretului', tag: 'RMN 3T · Imagistică', address: 'Zona Tineretului, Sector 4', hours: 'Lun–Vin: program standard', note: 'RMN 3 Tesla · ISO 9001 · Decontare CAS', maps: 'Clinica+RMN+Tineretului+Bucuresti', booking: null, imagingOnly: true },
+    ]
+  },
+  5: {
+    label: 'Sector 5 — Cotroceni · 13 Septembrie · Rahova',
+    clinics: [
+      { name: 'Medlife Panduri', tag: 'Ortopedie · RMN · Recuperare', address: 'Str. Dr. Leonte Anastasievici 2, Sector 5', hours: 'Lun–Vin: 07:00–21:00 · Sâm: 08:00–15:00', note: 'Ortopedie, recuperare, imagistică, analize', maps: 'Medlife+Panduri+Str+Leonte+Anastasievici+Bucuresti', booking: 'https://www.medlife.ro/programare-online' },
+      { name: 'Regina Maria Cotroceni', tag: 'Ortopedie · Imagistică', address: 'Bd. Geniului 2, Sector 6', hours: 'Lun–Vin: 07:30–20:00', note: 'Ortopedie, RMN, ecografie, recuperare · Aproape de Sector 5', maps: 'Regina+Maria+Cotroceni+Bd+Geniului+Bucuresti', booking: 'https://www.reginamaria.ro/programare' },
+      { name: 'Hipocrat Rahova', tag: 'Ortopedie · Spital privat', address: 'Calea Rahovei 259, Sector 5', hours: 'Lun–Vin: 07:00–20:00', note: 'Spital privat · Ortopedie, traumatologie, recuperare', maps: 'Hipocrat+Rahova+Calea+Rahovei+259+Bucuresti', booking: 'https://www.hipocrat.ro/programare?c=Spitalul+Hipocrat+Rahova' },
+      { name: 'WellCare Medical', tag: 'Ortopedie · Recuperare', address: 'Str. Uranus 100, Sector 5', hours: 'Lun–Vin: 08:00–20:00', note: 'Ortopedie, infiltrații PRP, recuperare post-operatorie', maps: 'WellCare+Medical+Str+Uranus+100+Bucuresti', booking: 'https://wellcaremed.ro/contact-programari/' },
+      { name: 'Medic Line George Coșbuc', tag: 'Ortopedie · Multidisciplinar', address: 'Bd. George Coșbuc 42-44, Sector 5', hours: 'Lun–Vin: 07:00–22:00 · Sâm: 07:00–19:30', note: 'Ortopedie, traumatologie, recuperare, analize', maps: 'Medic+Line+George+Cosbuc+42+Bucuresti', booking: 'https://medic-line.ro/doctori?locatie=george-cosbuc&specialitate=ortopedie' },
+    ]
+  },
+  6: {
+    label: 'Sector 6 — Militari · Drumul Taberei · Crângași',
+    clinics: [
+      { name: 'Sanador', tag: 'Ortopedie · RMN · Recuperare · Urgențe', address: 'Calea Plevnei 96, Sector 6', hours: 'Lun–Vin: 07:00–22:00 · Sâm: 08:00–16:00', note: 'Spital privat · Ortopedie, recuperare, imagistică, urgențe', maps: 'Sanador+Calea+Plevnei+96+Bucuresti', booking: 'https://www.sanador.ro/programare-online?speciality=5' },
+      { name: 'Medlife Militari', tag: 'Ortopedie · RMN · Recuperare', address: 'Bd. Iuliu Maniu 28, Sector 6', hours: 'Lun–Vin: 07:00–21:00 · Sâm: 08:00–15:00', note: 'Ortopedie, recuperare medicală, imagistică, analize', maps: 'Medlife+Militari+Bd+Iuliu+Maniu+Bucuresti', booking: 'https://www.medlife.ro/programare-online' },
+      { name: 'Regina Maria Militari', tag: 'Ortopedie · Imagistică', address: 'Bd. Iuliu Maniu 43, Sector 6', hours: 'Lun–Vin: 07:30–20:00', note: 'Ortopedie, RMN, CT, ecografie musculoscheletală', maps: 'Regina+Maria+Militari+Bd+Iuliu+Maniu+Bucuresti', booking: 'https://www.reginamaria.ro/programare' },
+      { name: 'Medicover Drumul Taberei', tag: 'Ortopedie · Recuperare', address: 'Bd. Timișoara 26, Sector 6', hours: 'Lun–Vin: 08:00–20:00', note: 'Ortopedie, fizioterapie, recuperare, analize', maps: 'Medicover+Drumul+Taberei+Bd+Timisoara+Bucuresti', booking: 'https://programare.medicover.ro/solicitare-programare' },
+      { name: 'Centrokinetic Militari', tag: 'Ortopedie · Recuperare · Kinetoterapie', address: 'Bd. Iuliu Maniu 15G, Sector 6', hours: 'Lun–Vin: 07:00–21:00 · Sâm: 08:00–14:00', note: 'Ortopedie, recuperare medicală, kinetoterapie, fizioterapie', maps: 'Centrokinetic+Militari+Bd+Iuliu+Maniu+15G+Bucuresti', booking: 'https://www.docbook.ro/clinici/clinica-centrokinetic-militari-centrokinetic' },
+    ]
+  }
+};
 
 let qStep = 0;
 let qAnswers = {};
@@ -1024,7 +1038,80 @@ async function submitLead() {
   }
 }
 
+function renderClinicsBySelectedSector() {
+  const sectorNums = [1, 2, 3, 4, 5, 6];
+  const sectorAnswer = qAnswers['sector'];
+  const sectorNum = (sectorAnswer !== undefined) ? sectorNums[sectorAnswer] : null;
+  const container = document.getElementById('clinicsDynamicContent');
+  if (!container) return;
+
+  if (sectorNum === null) {
+    document.getElementById('modalSectorTitle').textContent = 'Opțiuni de clinici · București';
+    container.innerHTML = '<div style="font-size:0.85rem;color:var(--text-muted);text-align:center;padding:1rem 0;">Parcurge evaluarea și alege sectorul tău pentru a vedea clinici personalizate.</div>';
+    return;
+  }
+
+  const data = clinicsDB[sectorNum];
+  if (!data) return;
+  document.getElementById('modalSectorTitle').textContent = `Clinici · ${data.label}`;
+
+  const mapIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
+  const calIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`;
+
+  const regular = data.clinics.filter(c => !c.imagingOnly);
+  const imaging = data.clinics.filter(c => c.imagingOnly);
+
+  function renderCard(c) {
+    const bookingBtn = c.booking
+      ? `<a class="clinic-map-btn" href="${c.booking}" target="_blank" style="background:rgba(0,201,141,0.08);border-color:rgba(0,201,141,0.3);color:#00C98D;">${calIcon} Programare ortopedie</a>`
+      : '';
+    return `
+      <div class="clinic-card">
+        <div class="clinic-header">
+          <div class="clinic-name">${c.name}</div>
+          <div class="clinic-tag">${c.tag}</div>
+        </div>
+        <div class="clinic-info">
+          <span>📍 ${c.address}</span>
+          <span>🕐 ${c.hours}</span>
+          <span>🏥 ${c.note}</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;">
+          ${bookingBtn}
+          <a class="clinic-map-btn" href="https://maps.google.com/?q=${c.maps}" target="_blank">${mapIcon} Vezi pe hartă</a>
+        </div>
+      </div>`;
+  }
+
+  let html = regular.map(renderCard).join('');
+
+  if (imaging.length > 0) {
+    html += `
+      <div style="margin:1.4rem 0 0.8rem;padding:0.5rem 1rem;background:rgba(255,255,255,0.03);border:0.5px solid var(--border-subtle);border-radius:10px;display:flex;align-items:center;gap:8px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span style="font-size:0.68rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);">Clinici doar cu investigații</span>
+      </div>`;
+    html += imaging.map(renderCard).join('');
+  }
+
+  if (data.comingSoon) {
+    html += `
+      <div class="clinic-card" style="border-color:rgba(255,200,0,0.25);background:rgba(255,200,0,0.04);">
+        <div class="clinic-header">
+          <div class="clinic-name" style="color:var(--text-secondary);">Mai multe clinici în curând</div>
+          <div class="clinic-tag" style="background:rgba(255,200,0,0.08);color:#FFC800;border-color:rgba(255,200,0,0.3);">În expansiune</div>
+        </div>
+        <div class="clinic-info">
+          <span style="color:var(--text-muted);">🔜 Urmărim să ne extindem rețeaua în Sectorul ${sectorNum}. Revino în curând pentru mai multe opțiuni.</span>
+        </div>
+      </div>`;
+  }
+
+  container.innerHTML = html;
+}
+
 function openClinicsModal() {
+  renderClinicsBySelectedSector();
   document.getElementById('clinicsModal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
