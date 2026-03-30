@@ -1235,6 +1235,9 @@ function buildLeadSummary() {
     ? [...sympSel].map(i => sympLabels[i] || '').join(', ')
     : 'Niciuna';
 
+  const sectorNums = [1, 2, 3, 4, 5, 6];
+  const sectorNum = qAnswers['sector'] !== undefined ? sectorNums[qAnswers['sector']] : null;
+
   return {
     zona: zoneLabels[qAnswers['zone']] || '—',
     durata: durationLabels[qAnswers['duration']] || '—',
@@ -1243,6 +1246,7 @@ function buildLeadSummary() {
     mobilitate: mobilityLabels[qAnswers['mobility']] || '—',
     urgenta: r.badge,
     investigatii: r.recInvestig.join(' | '),
+    sector: sectorNum ? 'Sector ' + sectorNum : '—',
     data: new Date().toLocaleString('ro-RO'),
   };
 }
@@ -1290,6 +1294,7 @@ async function submitLead() {
         mobilitate: lead.mobilitate,
         urgenta: lead.urgenta,
         investigatii: lead.investigatii,
+        sector: lead.sector,
         vrea_clinica: 'DA',
       })
     });
