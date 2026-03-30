@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TriajMed — Redirecționare</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue-deep: #040F24;
+    --blue-mid: #071A3E;
+    --accent: #1E8CFA;
+    --text-primary: #F0F6FF;
+    --text-secondary: #8DAAC8;
+  }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--blue-deep);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem;
+    text-align: center;
+  }
+  .logo { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; }
+  .logo span { color: var(--accent); }
+  .msg { font-size: 1rem; color: var(--text-secondary); }
+  .spinner {
+    width: 32px; height: 32px;
+    border: 3px solid rgba(30,140,250,0.2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+  <div class="logo">Triaj<span>Med</span></div>
+  <div class="spinner"></div>
+  <div class="msg">Te redirecționăm către clinică...</div>
+
+<script>
+(async function() {
+  const params = new URLSearchParams(window.location.search);
+  const clinica  = params.get('clinica')  || '';
+  const sector   = params.get('sector')   || '';
+  const zona     = params.get('zona')     || '';
+  const urgenta  = params.get('urgenta')  || '';
+  const booking  = params.get('booking')  || '';
+  const source   = params.get('source')   || 'email';
+
+  // Trimite click la Make — Scenariul 2 (Clinic Clicks)
+  // ÎNLOCUIEȘTE URL-UL DE MAI JOS cu webhook-ul Scenariului 2 din Make
+  const WEBHOOK_CLINIC_CLICKS = 'WEBHOOK_SCENARIUL_2_AICI';
+
+  if (WEBHOOK_CLINIC_CLICKS !== 'WEBHOOK_SCENARIUL_2_AICI') {
+    try {
+      await fetch(WEBHOOK_CLINIC_CLICKS, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tip_event:   'clinic_click',
+          clinica:     clinica,
+          sector:      sector,
+          zona:        zona,
+          urgenta:     urgenta,
+          durata:      '',
+          mobilitate:  '',
+          declansator: '',
+          source:      source,
+          data:        new Date().toLocaleString('ro-RO'),
+        })
+      });
+    } catch(e) {}
+  }
+
+  // Redirecționează spre clinică
+  if (booking) {
+    window.location.href = decodeURIComponent(booking);
+  } else {
+    document.querySelector('.msg').textContent = 'Link invalid. Revino pe triajmed.ro.';
+    document.querySelector('.spinner').style.display = 'none';
+  }
+})();
+</script>
+</body>
+</html>
