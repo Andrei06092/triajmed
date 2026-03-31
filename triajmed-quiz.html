@@ -1419,35 +1419,47 @@ document.getElementById('clinicsModal').addEventListener('click', function(e) {
 // ── Clinic click tracking ──
 
 async function trackClinicClick(clinicName, sector) {
-  // 1) GA4 custom event — apare în GA > Events ca "clinic_booking_click"
+  const zoneLabels     = ['Genunchi','Coloana lombară','Coloana cervicală','Umăr','Șold','Gleznă','Cot'];
+  const durationLabels = ['Sub 48 ore','2–7 zile','1–4 săptămâni','Peste o lună'];
+  const mobilityLabels = ['Funcționez normal','Activitate parțial limitată','Limitare severă','Durere în repaus/nocturnă'];
+  const triggerLabels  = ['Traumatism/accident','Efort fizic/sport','Apărut progresiv','Recidivă'];
+
+  const zona       = qAnswers['zone']     !== undefined ? zoneLabels[qAnswers['zone']]         : 'necunoscut';
+  const durata     = qAnswers['duration'] !== undefined ? durationLabels[qAnswers['duration']] : 'necunoscut';
+  const mobilitate = qAnswers['mobility'] !== undefined ? mobilityLabels[qAnswers['mobility']] : 'necunoscut';
+  const declansator = qAnswers['trigger'] !== undefined ? triggerLabels[qAnswers['trigger']]   : 'necunoscut';
+  const urgenta    = (typeof qComputeResult === 'function') ? qComputeResult().badge : '—';
+
+  // 1) GA4
   if (typeof gtag === 'function') {
     gtag('event', 'clinic_booking_click', {
       clinic_name: clinicName,
-      sector: sector,
-      zona: qAnswers['zone'] !== undefined
-        ? ['Genunchi','Coloana lombară','Coloana cervicală','Umăr','Șold','Gleznă','Cot'][qAnswers['zone']]
-        : 'necunoscut',
+      sector:      'Sector ' + sector,
+      zona:        zona,
+      urgenta:     urgenta,
     });
   }
 
-  // 2) Make webhook — loghează în Google Sheet > TriajMed Leads
+  // 2) Make — Scenariul 2 (Clinic Clicks)
   try {
-    await fetch('https://hook.eu1.make.com/jj2bctd4o1ho98qabn22v2x5hvnrljxt', {
+    await fetch('https://hook.eu1.make.com/1txsh7un729iwho9fz4hk15aavffg5vv', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        tip_event: 'clinic_click',
-        clinica: clinicName,
-        sector: sector,
-        zona: qAnswers['zone'] !== undefined
-          ? ['Genunchi','Coloana lombară','Coloana cervicală','Umăr','Șold','Gleznă','Cot'][qAnswers['zone']]
-          : 'necunoscut',
-        urgenta: qComputeResult ? qComputeResult().badge : '—',
-        data: new Date().toLocaleString('ro-RO'),
+        tip_event:   'clinic_click',
+        clinica:     clinicName,
+        sector:      'Sector ' + sector,
+        zona:        zona,
+        durata:      durata,
+        mobilitate:  mobilitate,
+        declansator: declansator,
+        urgenta:     urgenta,
+        source:      'quiz',
+        data:        new Date().toLocaleString('ro-RO'),
       })
     });
   } catch(e) {
-    // silently fail — nu blocăm utilizatorul
+    // silently fail
   }
 }
 
