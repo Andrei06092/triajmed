@@ -47,12 +47,15 @@
 <script>
 (async function() {
   const params = new URLSearchParams(window.location.search);
-  const clinica  = params.get('clinica')  || '';
-  const sector   = params.get('sector')   || '';
-  const zona     = params.get('zona')     || '';
-  const urgenta  = params.get('urgenta')  || '';
-  const booking  = params.get('booking')  || '';
-  const source   = params.get('source')   || 'email';
+  const clinica     = params.get('clinica')     || '';
+  const sector      = params.get('sector')      || '';
+  const zona        = params.get('zona')         || '';
+  const urgenta     = params.get('urgenta')      || '';
+  const durata      = params.get('durata')       || '';
+  const mobilitate  = params.get('mobilitate')   || '';
+  const declansator = params.get('declansator')  || '';
+  const booking     = params.get('booking')      || '';
+  const source      = params.get('source')       || 'email';
 
   // Trimite click la Make — Scenariul 2 (Clinic Clicks)
   // ÎNLOCUIEȘTE URL-UL DE MAI JOS cu webhook-ul Scenariului 2 din Make
@@ -69,9 +72,9 @@
           sector:      sector,
           zona:        zona,
           urgenta:     urgenta,
-          durata:      '',
-          mobilitate:  '',
-          declansator: '',
+          durata:      durata,
+          mobilitate:  mobilitate,
+          declansator: declansator,
           source:      source,
           data:        new Date().toLocaleString('ro-RO'),
         })
