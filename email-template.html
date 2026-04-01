@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head>
+<body style="margin:0;padding:0;background:#040F24;font-family:'Segoe UI',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#040F24;padding:32px 16px;">
+  <tr><td align="center">
+  <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+
+    <!-- LOGO -->
+    <tr><td style="padding:0 0 20px;">
+      <span style="font-size:20px;font-weight:800;color:#F0F6FF;letter-spacing:-0.3px;">Triaj<span style="color:#1E8CFA;">Med</span></span>
+    </td></tr>
+
+    <!-- URGENTA BADGE — CEL MAI SUS -->
+    <tr><td style="padding:0 0 20px;text-align:left;">
+      <div style="display:inline-block;padding:10px 22px;border-radius:100px;font-size:15px;font-weight:700;letter-spacing:0px;
+        background:{{urgenta_bg}};color:{{urgenta_color}};border:1.5px solid {{urgenta_border}};">
+        {{urgenta}}
+      </div>
+    </td></tr>
+
+    <!-- SALUT -->
+    <tr><td style="padding:0 0 20px;">
+      <p style="margin:0;font-size:15px;color:#F0F6FF;font-weight:400;">Bună <strong>{{nume}}</strong>, am primit evaluarea ta.</p>
+    </td></tr>
+
+    <!-- SPECIALITATE -->
+    <tr><td style="padding:0 0 20px;">
+      <table cellpadding="0" cellspacing="0" style="background:#071A3E;border:1px solid rgba(30,140,250,0.2);border-radius:10px;padding:10px 16px;">
+        <tr>
+          <td style="font-size:12px;color:#8DAAC8;">Specialitate recomandată</td>
+          <td style="padding:0 10px;font-size:14px;color:#8DAAC8;">→</td>
+          <td style="font-size:13px;font-weight:700;color:#1E8CFA;">Ortopedie</td>
+        </tr>
+      </table>
+    </td></tr>
+
+    <!-- DESCRIERE (toate raspunsurile) + COPY -->
+    <tr><td style="padding:0 0 16px;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background:#071A3E;border:1px solid rgba(30,140,250,0.2);border-radius:12px;overflow:hidden;">
+        <tr>
+          <td style="padding:10px 16px;background:rgba(30,140,250,0.08);border-bottom:1px solid rgba(30,140,250,0.15);">
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="font-size:11px;font-weight:700;color:#1E8CFA;text-transform:uppercase;letter-spacing:0.08em;">
+                  Descriere
+                  <span style="font-size:12px;font-weight:400;color:#8DAAC8;text-transform:none;letter-spacing:0;">&nbsp;— copiați și puneți la câmpul "Descriere" de pe site-ul clinicii, dacă există</span>
+                </td>
+                <td align="right">
+                  <a href="https://triajmed.ro/copy.html?text={{descriere_encoded}}" style="display:inline-block;padding:4px 12px;background:rgba(30,140,250,0.12);border:1px solid rgba(30,140,250,0.3);border-radius:20px;font-size:11px;color:#1E8CFA;text-decoration:none;font-weight:600;">
+                    📋 Copiază
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr><td style="padding:14px 16px;">
+          <table cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="padding:3px 0;font-size:12px;color:#8DAAC8;width:130px;">Zonă afectată</td>
+              <td style="padding:3px 0;font-size:12px;color:#F0F6FF;">{{zona}}</td>
+            </tr>
+            <tr>
+              <td style="padding:3px 0;font-size:12px;color:#8DAAC8;">Durată simptome</td>
+              <td style="padding:3px 0;font-size:12px;color:#F0F6FF;">{{durata}}</td>
+            </tr>
+            <tr>
+              <td style="padding:3px 0;font-size:12px;color:#8DAAC8;">Declanșator</td>
+              <td style="padding:3px 0;font-size:12px;color:#F0F6FF;">{{declansator}}</td>
+            </tr>
+            <tr>
+              <td style="padding:3px 0;font-size:12px;color:#8DAAC8;">Simptome asociate</td>
+              <td style="padding:3px 0;font-size:12px;color:#F0F6FF;">{{simptome}}</td>
+            </tr>
+            <tr>
+              <td style="padding:3px 0;font-size:12px;color:#8DAAC8;">Mobilitate</td>
+              <td style="padding:3px 0;font-size:12px;color:#F0F6FF;">{{mobilitate}}</td>
+            </tr>
+          </table>
+        </td></tr>
+      </table>
+    </td></tr>
+
+    <!-- INVESTIGATII + COPY -->
+    <tr><td style="padding:0 0 24px;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background:#071A3E;border:1px solid rgba(30,140,250,0.2);border-radius:12px;overflow:hidden;">
+        <tr>
+          <td style="padding:10px 16px;background:rgba(30,140,250,0.08);border-bottom:1px solid rgba(30,140,250,0.15);">
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="font-size:11px;font-weight:700;color:#1E8CFA;text-transform:uppercase;letter-spacing:0.08em;">
+                  Investigații recomandate
+                  <span style="font-size:12px;font-weight:400;color:#8DAAC8;text-transform:none;letter-spacing:0;">&nbsp;— copiați și puneți la câmpul "Investigații" de pe site-ul clinicii, dacă există</span>
+                </td>
+                <td align="right">
+                  <a href="https://triajmed.ro/copy.html?text={{investigatii_encoded}}" style="display:inline-block;padding:4px 12px;background:rgba(30,140,250,0.12);border:1px solid rgba(30,140,250,0.3);border-radius:20px;font-size:11px;color:#1E8CFA;text-decoration:none;font-weight:600;">📋 Copiază</a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr><td style="padding:14px 16px;font-size:12px;color:#8DAAC8;line-height:2;">{{investigatii}}</td></tr>
+      </table>
+    </td></tr>
+
+    <!-- CLINICI DIN SECTORUL ALES -->
+    <tr><td style="padding:0 0 12px;">
+      <p style="margin:0;font-size:14px;font-weight:600;color:#F0F6FF;">Clinici disponibile în {{sector}}</p>
+      <p style="margin:4px 0 0;font-size:12px;color:#8DAAC8;">Apasă butonul pentru a te programa direct.</p>
+    </td></tr>
+
+    <tr><td>
+      <table width="100%" cellpadding="0" cellspacing="0" style="background:#071A3E;border:1px solid rgba(30,140,250,0.2);border-radius:12px;overflow:hidden;">
+        <tr>
+          <td style="padding:10px 16px;background:rgba(30,140,250,0.08);border-bottom:1px solid rgba(30,140,250,0.15);">
+            <span style="font-size:11px;font-weight:600;color:#1E8CFA;text-transform:uppercase;letter-spacing:0.08em;">{{sector}}</span>
+          </td>
+        </tr>
+        {{clinici_html}}
+      </table>
+    </td></tr>
+
+    <!-- DISCLAIMER -->
+    <tr><td style="padding:20px 0 0;border-top:1px solid rgba(255,255,255,0.06);margin-top:20px;">
+      <p style="margin:0;font-size:11px;color:#4A6480;line-height:1.6;">
+        <strong style="color:#6A84A0;">Notă:</strong> Evaluarea are caracter orientativ și nu constituie un diagnostic medical. TriajMed nu validează nicio clinică. Consultați întotdeauna un medic specialist.
+      </p>
+    </td></tr>
+
+    <!-- FOOTER -->
+    <tr><td style="padding:16px 0 0;text-align:center;">
+      <p style="margin:0;font-size:12px;color:#4A6480;">Echipa <strong style="color:#8DAAC8;">TriajMed</strong> · <a href="https://triajmed.ro" style="color:#1E8CFA;text-decoration:none;">triajmed.ro</a></p>
+    </td></tr>
+
+  </table>
+  </td></tr>
+</table>
+</body>
+</html>
