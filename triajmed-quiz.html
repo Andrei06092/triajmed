@@ -1245,7 +1245,8 @@ function buildLeadSummary() {
     simptome: sympText,
     mobilitate: mobilityLabels[qAnswers['mobility']] || '—',
     urgenta: r.badge,
-    investigatii: r.recInvestig.join(' | '),
+    investigatii: r.recInvestig.join('<br>'),
+    investigatii_text: r.recInvestig.join(' | '),
     sector: sectorNum ? 'Sector ' + sectorNum : '—',
     data: new Date().toLocaleString('ro-RO'),
   };
@@ -1294,6 +1295,7 @@ async function submitLead() {
         mobilitate: lead.mobilitate,
         urgenta: lead.urgenta,
         investigatii: lead.investigatii,
+        investigatii_text: lead.investigatii_text,
         sector: lead.sector,
         vrea_clinica: 'DA',
       })
@@ -1315,7 +1317,7 @@ async function submitLead() {
         Simptome_asociate: lead.simptome,
         Mobilitate: lead.mobilitate,
         Urgenta: lead.urgenta,
-        Investigatii_recomandate: lead.investigatii,
+        Investigatii_recomandate: lead.investigatii_text,
         Vrea_clinica: 'DA',
       })
     });
