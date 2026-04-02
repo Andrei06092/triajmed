@@ -1231,17 +1231,58 @@ function buildLeadSummary() {
   const sectorNums = [1, 2, 3, 4, 5, 6];
   const sectorNum = qAnswers['sector'] !== undefined ? sectorNums[qAnswers['sector']] : null;
 
+  // Build clinici HTML pentru sectorul ales
+  function buildCliniciHtml(sNum) {
+    if (!sNum || !clinicsDB[sNum]) return '<p style="color:#8DAAC8;font-size:13px;">Sectorul nu a fost specificat.</p>';
+    const zona = zoneLabels[qAnswers['zone']] || '—';
+    const urg = r.badge;
+    const dur = durationLabels[qAnswers['duration']] || '';
+    const mob = mobilityLabels[qAnswers['mobility']] || '';
+    const dec = triggerLabels[qAnswers['trigger']] || '';
+    return clinicsDB[sNum].clinics.map(function(c) {
+      var btn = c.booking
+        ? '<a href="https://triajmed.ro/redirect.html?clinica=' + encodeURIComponent(c.name) + '&sector=Sector+' + sNum + '&zona=' + encodeURIComponent(zona) + '&urgenta=' + encodeURIComponent(urg) + '&durata=' + encodeURIComponent(dur) + '&mobilitate=' + encodeURIComponent(mob) + '&declansator=' + encodeURIComponent(dec) + '&booking=' + encodeURIComponent(c.booking) + '&source=email" style="display:inline-block;padding:7px 16px;background:#1E8CFA;color:#ffffff;text-decoration:none;border-radius:20px;font-size:12px;font-weight:600;">Programare ortopedie</a>'
+        : '<span style="font-size:12px;color:#8DAAC8;font-style:italic;">Contactați direct clinica</span>';
+      return '<tr><td style="padding:11px 16px;border-bottom:1px solid #0D2A55;"><div style="font-weight:600;font-size:13px;color:#F0F6FF;margin-bottom:2px;">' + c.name + '</div><div style="font-size:11px;color:#8DAAC8;margin-bottom:7px;">📍 ' + c.address + '</div>' + btn + '</td></tr>';
+    }).join('');
+  }
+
+  const cliniciRows = buildCliniciHtml(sectorNum);
+
+  var zona = zoneLabels[qAnswers['zone']] || '—';
+  var durata = durationLabels[qAnswers['duration']] || '—';
+  var declansator = triggerLabels[qAnswers['trigger']] || '—';
+  var mobilitate = mobilityLabels[qAnswers['mobility']] || '—';
+  var descriereText = 'Zonă afectată: ' + zona + '\nDurată simptome: ' + durata + '\nDeclanșator: ' + declansator + '\nSimptome asociate: ' + sympText + '\nMobilitate: ' + mobilitate;
+
   return {
-    zona: zoneLabels[qAnswers['zone']] || '—',
-    durata: durationLabels[qAnswers['duration']] || '—',
-    declansator: triggerLabels[qAnswers['trigger']] || '—',
+    zona: zona,
+    durata: durata,
+    declansator: declansator,
     simptome: sympText,
-    mobilitate: mobilityLabels[qAnswers['mobility']] || '—',
+    mobilitate: mobilitate,
     urgenta: r.badge,
     investigatii: r.recInvestig.join('<br>'),
     investigatii_text: r.recInvestig.join(' | '),
+    descriere_encoded: encodeURIComponent(descriereText),
+    investigatii_encoded: encodeURIComponent(r.recInvestig.join('\n')),
+    urgenta_bg: r.level === 'low' ? 'rgba(0,201,141,0.1)' : r.level === 'med' ? 'rgba(255,200,0,0.08)' : 'rgba(255,140,66,0.1)',
+    urgenta_color: r.level === 'low' ? '#00C98D' : r.level === 'med' ? '#FFC800' : '#FF8C42',
+    urgenta_border: r.level === 'low' ? 'rgba(0,201,141,0.3)' : r.level === 'med' ? 'rgba(255,200,0,0.3)' : 'rgba(255,140,66,0.3)',
     sector: sectorNum ? 'Sector ' + sectorNum : '—',
+    clinici_html: cliniciRows,
     data: new Date().toLocaleString('ro-RO'),
+    result_url: 'https://triajmed.ro/result.html?' + [
+      'zona=' + encodeURIComponent(zona),
+      'durata=' + encodeURIComponent(durata),
+      'declansator=' + encodeURIComponent(declansator),
+      'simptome=' + encodeURIComponent(sympText),
+      'mobilitate=' + encodeURIComponent(mobilitate),
+      'urgenta=' + encodeURIComponent(r.badge),
+      'urgenta_level=' + r.level,
+      'investigatii=' + encodeURIComponent(r.recInvestig.join('|')),
+      'sector=' + (sectorNum || ''),
+    ].join('&'),
   };
 }
 
@@ -1290,6 +1331,13 @@ async function submitLead() {
         investigatii: lead.investigatii,
         investigatii_text: lead.investigatii_text,
         sector: lead.sector,
+        clinici_html: lead.clinici_html,
+        descriere_encoded: lead.descriere_encoded,
+        investigatii_encoded: lead.investigatii_encoded,
+        urgenta_bg: lead.urgenta_bg,
+        urgenta_color: lead.urgenta_color,
+        urgenta_border: lead.urgenta_border,
+        result_url: lead.result_url,
         vrea_clinica: 'DA',
       })
     });

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TriajMed — Sumarul tău</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue-deep: #040F24;
+    --blue-mid: #071A3E;
+    --blue-card: #0A2150;
+    --accent: #1E8CFA;
+    --accent-soft: #3BA5FF;
+    --accent-glow: rgba(30,140,250,0.15);
+    --accent-line: rgba(30,140,250,0.35);
+    --text-primary: #F0F6FF;
+    --text-secondary: #8DAAC8;
+    --text-muted: #4A6480;
+    --border: rgba(30,140,250,0.18);
+    --border-subtle: rgba(255,255,255,0.06);
+    --success: #00C98D;
+    --warn: #FF8C42;
+  }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--blue-deep);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 2rem 1rem 5rem;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 10%, rgba(30,140,250,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 80% 85%, rgba(0,201,141,0.05) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+  .wrapper { position: relative; z-index: 1; width: 100%; max-width: 620px; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.5px; color: var(--text-primary); text-decoration: none; }
+  .logo span { color: var(--accent); }
+  .card {
+    background: var(--blue-mid); border: 0.5px solid var(--border);
+    border-radius: 20px; padding: 2rem;
+    box-shadow: 0 8px 60px rgba(0,0,0,0.4);
+    margin-bottom: 1rem; position: relative; overflow: hidden;
+  }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+  .card-label {
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin-bottom: 1rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .copy-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 12px; border-radius: 100px;
+    background: rgba(30,140,250,0.1); border: 0.5px solid var(--accent-line);
+    color: var(--accent); font-size: 0.72rem; font-weight: 600;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s; text-transform: none; letter-spacing: 0;
+  }
+  .copy-btn:hover { background: var(--accent-glow); }
+  .copy-btn.copied { background: rgba(0,201,141,0.12); border-color: rgba(0,201,141,0.4); color: var(--success); }
+  .urgency-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 0.4rem 1.2rem; border-radius: 100px;
+    font-size: 0.85rem; font-weight: 700;
+    font-family: 'Syne', sans-serif; margin-bottom: 1.5rem;
+  }
+  .spec-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0.7rem 1rem;
+    background: rgba(255,255,255,0.02); border: 0.5px solid var(--border-subtle);
+    border-radius: 10px; margin-bottom: 1rem; font-size: 0.88rem;
+  }
+  .spec-label { color: var(--text-muted); }
+  .spec-arrow { color: var(--accent); font-weight: 700; }
+  .spec-val { color: var(--accent); font-weight: 600; }
+  .desc-row { display: flex; padding: 6px 0; border-bottom: 0.5px solid var(--border-subtle); font-size: 0.88rem; }
+  .desc-row:last-child { border-bottom: none; }
+  .desc-key { color: var(--text-muted); min-width: 140px; font-weight: 300; }
+  .desc-val { color: var(--text-primary); }
+  .investig-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .investig-list li { display: flex; align-items: flex-start; gap: 8px; font-size: 0.86rem; color: var(--text-secondary); font-weight: 300; line-height: 1.55; }
+  .investig-list li::before { content: '→'; color: var(--accent); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .clinic-card {
+    background: rgba(255,255,255,0.02); border: 0.5px solid var(--border-subtle);
+    border-radius: 12px; padding: 1rem; margin-bottom: 8px;
+  }
+  .clinic-name { font-size: 0.92rem; font-weight: 600; margin-bottom: 3px; }
+  .clinic-addr { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px; }
+  .clinic-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn-book {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 16px; border-radius: 100px;
+    background: rgba(0,201,141,0.08); border: 0.5px solid rgba(0,201,141,0.3);
+    color: var(--success); font-size: 0.8rem; font-weight: 600;
+    text-decoration: none; transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-book:hover { background: rgba(0,201,141,0.15); }
+  .btn-maps {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 14px; border-radius: 100px;
+    background: rgba(255,255,255,0.03); border: 0.5px solid var(--border-subtle);
+    color: var(--text-secondary); font-size: 0.8rem; font-weight: 500;
+    text-decoration: none; transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-maps:hover { border-color: var(--accent-line); color: var(--text-primary); }
+  .disclaimer {
+    margin-top: 1rem; padding: 0.9rem 1.1rem;
+    background: rgba(255,140,66,0.05); border: 0.5px solid rgba(255,140,66,0.18);
+    border-radius: 12px; font-size: 0.76rem; color: var(--text-muted); line-height: 1.65;
+  }
+  .disclaimer strong { color: rgba(255,140,66,0.85); }
+  @media (max-width: 480px) {
+    body { padding: 1.2rem 0.8rem 4rem; }
+    .card { padding: 1.5rem; }
+    .desc-key { min-width: 110px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="topbar">
+    <a href="index.html" class="logo">Triaj<span>Med</span></a>
+  </div>
+
+  <div id="content"></div>
+
+</div>
+
+<script>
+const WEBHOOK_CLINIC_CLICKS = 'https://hook.eu1.make.com/1txsh7un729iwho9fz4hk15aavffg5vv';
+
+const clinicsDB = {
+  1: { label: 'Sector 1 — Floreasca · Dorobanți · Aviatorilor', clinics: [
+    { name: 'OrthoCare Clinic', address: 'Șos. Nicolae Titulescu 64', maps: 'OrthoCare+Clinic+Sos+Nicolae+Titulescu+64+Bucuresti', booking: 'https://orthocareclinic.ro/contact/' },
+    { name: 'Clinica Masaya', address: 'Str. Aviator Popisteanu 16', maps: 'Clinica+Masaya+Str+Aviator+Popisteanu+16+Bucuresti', booking: 'https://clinicamasaya.ro/contact/' },
+    { name: 'Bio Ortoclinic', address: 'Șos. Gh. Ionescu Sisești 325A', maps: 'Bio+Ortoclinic+Sos+Sisesti+325A+Bucuresti', booking: 'https://www.bio-ortoclinic.ro/programari/' },
+    { name: 'Ortokinetic Dorobanți', address: 'Intr. Bitolia 14', maps: 'Ortokinetic+Dorobanti+Intrarea+Bitolia+14+Bucuresti', booking: 'https://www.ortokinetic.ro/programare-online' },
+    { name: 'Regina Maria Floreasca', address: 'Calea Floreasca 88-90', maps: 'Regina+Maria+Floreasca+Calea+Floreasca+Bucuresti', booking: 'https://www.reginamaria.ro/programare' },
+  ]},
+  2: { label: 'Sector 2 — Colentina · Tei · Iancului', clinics: [
+    { name: 'Artro Sport Clinic', address: 'Bd. Lacul Tei', maps: 'Artro+Sport+Clinic+Bucuresti+Sector+2', booking: 'https://artrosport.ro/contact/' },
+    { name: 'Centrokinetic Barbu Văcărescu', address: 'Str. Barbu Văcărescu 102', maps: 'Centrokinetic+Barbu+Vacarescu+102+Bucuresti', booking: 'https://www.docbook.ro/clinici/clinica-centrokinetic-barbu-vacarescu-centrokinetic' },
+    { name: 'NORD — Grupul Medical Provita', address: 'Bd. Dimitrie Pompeiu 9-9A', maps: 'NORD+Grupul+Medical+Provita+Bd+Dimitrie+Pompeiu+Bucuresti', booking: 'https://nord.ro/programeaza-te/' },
+    { name: 'Medicover Obor', address: 'Bd. Ferdinand I 96', maps: 'Medicover+Obor+Bd+Ferdinand+Bucuresti', booking: 'https://programare.medicover.ro/solicitare-programare' },
+  ]},
+  3: { label: 'Sector 3 — Timpuri Noi · Vitan · Dristor', clinics: [
+    { name: 'KINOMED', address: 'Str. Valeriu Braniște 37-39', maps: 'KINOMED+Str+Valeriu+Braniste+37+Bucuresti', booking: 'https://kinomed.ro/programare-online/' },
+    { name: 'Ortokinetic Timpuri Noi', address: 'Str. V.V. Stanciu 213', maps: 'Ortokinetic+Timpuri+Noi+Str+VV+Stanciu+213+Bucuresti', booking: 'https://www.ortokinetic.ro/programare-online' },
+    { name: 'Centrokinetic Dristor', address: 'Str. Laborator 14', maps: 'Centrokinetic+Dristor+Str+Laborator+14+Bucuresti', booking: 'https://www.docbook.ro/clinici/clinica-centrokinetic-dristor-centrokinetic' },
+    { name: 'Medlife Timpuri Noi', address: 'Bd. Corneliu Coposu 6-8', maps: 'Medlife+Timpuri+Noi+Bd+Corneliu+Coposu+Bucuresti', booking: 'https://www.medlife.ro/programare-online' },
+    { name: 'Biomed Scan RMN', address: 'Str. Răcari 6A', maps: 'Biomed+Scan+RMN+Str+Racari+6A+Bucuresti', booking: 'https://biomedscan.ro/contact-programare/' },
+  ]},
+  4: { label: 'Sector 4 — Tineretului · Berceni · Brâncoveanu', clinics: [
+    { name: 'LocalMedic', address: 'Piața Sudului', maps: 'LocalMedic+Piata+Sudului+Sector+4+Bucuresti', booking: null },
+    { name: 'NovaLife', address: 'Str. Izvorul Rece 12', maps: 'NovaLife+Str+Izvorul+Rece+12+Bucuresti', booking: 'https://novalife.ro/programare-online/' },
+    { name: 'Medlife Berceni', address: 'Șos. Berceni 12', maps: 'Medlife+Berceni+Sos+Berceni+Bucuresti', booking: 'https://www.medlife.ro/programare-online' },
+    { name: 'Clinica RMN Tineretului', address: 'Str. Lănăriei 90', maps: 'Clinica+RMN+Tineretului+Str+Lanariei+90+Bucuresti', booking: 'https://www.docbook.ro/clinici/Clinica-RMN-Tineretului-Diagnost-Now' },
+  ]},
+  5: { label: 'Sector 5 — Cotroceni · 13 Septembrie · Rahova', clinics: [
+    { name: 'SwissMed Clinic', address: 'Str. Gara Dealul Spirii 2', maps: 'SwissMed+Clinic+Str+Gara+Dealul+Spirii+2+Bucuresti', booking: null },
+    { name: 'Hipocrat Rahova', address: 'Calea Rahovei 259', maps: 'Hipocrat+Rahova+Calea+Rahovei+259+Bucuresti', booking: 'https://www.hipocrat.ro/programare?c=Spitalul+Hipocrat+Rahova' },
+    { name: 'Regina Maria Cotroceni', address: 'Bd. Geniului 2', maps: 'Regina+Maria+Cotroceni+Bd+Geniului+Bucuresti', booking: 'https://www.reginamaria.ro/programare' },
+  ]},
+  6: { label: 'Sector 6 — Militari · Drumul Taberei · Crângași', clinics: [
+    { name: 'Centrokinetic Militari', address: 'Bd. Iuliu Maniu 15G', maps: 'Centrokinetic+Militari+Bd+Iuliu+Maniu+15G+Bucuresti', booking: 'https://www.docbook.ro/clinici/clinica-centrokinetic-militari-centrokinetic' },
+    { name: 'UpMedical', address: 'Sector 6, București', maps: 'UpMedical+Ortopedie+Sector+6+Bucuresti', booking: 'https://www.upmedical.ro/programare/' },
+    { name: 'Sanador', address: 'Calea Plevnei 96', maps: 'Sanador+Calea+Plevnei+96+Bucuresti', booking: 'https://www.sanador.ro/programare-online?speciality=5' },
+    { name: 'Medicover Drumul Taberei', address: 'Bd. Timișoara 26', maps: 'Medicover+Drumul+Taberei+Bd+Timisoara+Bucuresti', booking: 'https://programare.medicover.ro/solicitare-programare' },
+  ]},
+};
+
+function getParams() {
+  const p = new URLSearchParams(window.location.search);
+  return {
+    nume:        p.get('nume')        || '',
+    zona:        p.get('zona')        || '—',
+    durata:      p.get('durata')      || '—',
+    declansator: p.get('declansator') || '—',
+    simptome:    p.get('simptome')    || '—',
+    mobilitate:  p.get('mobilitate')  || '—',
+    urgenta:     p.get('urgenta')     || '—',
+    urgenta_level: p.get('urgenta_level') || 'med',
+    investigatii: decodeURIComponent(p.get('investigatii') || '').split('|').filter(Boolean),
+    sector:      parseInt(p.get('sector')) || null,
+    data:        p.get('data')        || '',
+  };
+}
+
+function urgencyStyle(level) {
+  if (level === 'low')  return 'background:rgba(0,201,141,0.1);color:#00C98D;border:1.5px solid rgba(0,201,141,0.3);';
+  if (level === 'high') return 'background:rgba(255,140,66,0.1);color:#FF8C42;border:1.5px solid rgba(255,140,66,0.3);';
+  return 'background:rgba(255,200,0,0.08);color:#FFC800;border:1.5px solid rgba(255,200,0,0.3);';
+}
+
+async function trackClick(clinicName, sector, zona, urgenta, booking) {
+  if (typeof gtag === 'function') {
+    gtag('event', 'clinic_booking_click', { clinic_name: clinicName, sector: 'Sector ' + sector, zona, urgenta });
+  }
+  try {
+    await fetch(WEBHOOK_CLINIC_CLICKS, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tip_event: 'clinic_click', clinica: clinicName,
+        sector: 'Sector ' + sector, zona, urgenta,
+        source: 'result_page', data: new Date().toLocaleString('ro-RO'),
+      })
+    });
+  } catch(e) {}
+  window.open(booking, '_blank');
+}
+
+function copyText(id, btnId) {
+  const el = document.getElementById(id);
+  const text = el.innerText || el.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    const btn = document.getElementById(btnId);
+    btn.textContent = '✓ Copiat!';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = '📋 Copiază';
+      btn.classList.remove('copied');
+    }, 2500);
+  });
+}
+
+function render() {
+  const d = getParams();
+  const sectorData = d.sector ? clinicsDB[d.sector] : null;
+  const calSvg = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+  const mapSvg = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+
+  const descriereText = 'Zonă afectată: ' + d.zona + '\nDurată simptome: ' + d.durata + '\nDeclanșator: ' + d.declansator + '\nSimptome asociate: ' + d.simptome + '\nMobilitate: ' + d.mobilitate;
+  const investigatiiText = d.investigatii.join('\n');
+
+  const cliniciHtml = sectorData ? sectorData.clinics.map(function(c) {
+    const bookBtn = c.booking
+      ? '<a class="btn-book" href="#" onclick="trackClick(\'' + c.name.replace(/'/g, "\\'") + '\',' + d.sector + ',\'' + d.zona + '\',\'' + d.urgenta + '\',\'' + c.booking + '\');return false;">' + calSvg + ' Programare ortopedie</a>'
+      : '<span style="font-size:0.78rem;color:var(--text-muted);">Contactați direct</span>';
+    return '<div class="clinic-card"><div class="clinic-name">' + c.name + '</div><div class="clinic-addr">📍 ' + c.address + '</div><div class="clinic-btns">' + bookBtn + '<a class="btn-maps" href="https://maps.google.com/?q=' + c.maps + '" target="_blank">' + mapSvg + ' Hartă</a></div></div>';
+  }).join('') : '<p style="color:var(--text-muted);font-size:0.85rem;">Sectorul nu a fost specificat.</p>';
+
+  document.getElementById('content').innerHTML =
+    (d.nume ? '<p style="font-size:0.95rem;color:var(--text-secondary);margin-bottom:1.2rem;">Bună <strong style="color:var(--text-primary);">' + d.nume + '</strong>, aici este sumarul evaluării tale.</p>' : '') +
+
+    '<div class="card" style="margin-bottom:0.8rem;">' +
+      '<div style="margin-bottom:0.8rem;"><span class="urgency-badge" style="' + urgencyStyle(d.urgenta_level) + '">' + d.urgenta + '</span></div>' +
+      '<div class="spec-row"><span class="spec-label">Specialitate recomandată</span><span class="spec-arrow">→</span><span class="spec-val">Ortopedie</span></div>' +
+    '</div>' +
+
+    '<div class="card" style="margin-bottom:0.8rem;">' +
+      '<div class="card-label">Descriere' +
+        '<button class="copy-btn" id="btn-desc" onclick="copyText(\'desc-text\',\'btn-desc\')">📋 Copiază</button>' +
+      '</div>' +
+      '<div id="desc-text">' +
+        '<div class="desc-row"><span class="desc-key">Zonă afectată</span><span class="desc-val">' + d.zona + '</span></div>' +
+        '<div class="desc-row"><span class="desc-key">Durată simptome</span><span class="desc-val">' + d.durata + '</span></div>' +
+        '<div class="desc-row"><span class="desc-key">Declanșator</span><span class="desc-val">' + d.declansator + '</span></div>' +
+        '<div class="desc-row"><span class="desc-key">Simptome asociate</span><span class="desc-val">' + d.simptome + '</span></div>' +
+        '<div class="desc-row"><span class="desc-key">Mobilitate</span><span class="desc-val">' + d.mobilitate + '</span></div>' +
+      '</div>' +
+      '<p style="font-size:0.72rem;color:var(--text-muted);margin-top:0.8rem;">Copiați și puneți la câmpul "Descriere" de pe site-ul clinicii, dacă există.</p>' +
+    '</div>' +
+
+    '<div class="card" style="margin-bottom:0.8rem;">' +
+      '<div class="card-label">Investigații recomandate' +
+        '<button class="copy-btn" id="btn-inv" onclick="copyText(\'inv-text\',\'btn-inv\')">📋 Copiază</button>' +
+      '</div>' +
+      '<ul class="investig-list" id="inv-text">' +
+        d.investigatii.map(function(i) { return '<li>' + i + '</li>'; }).join('') +
+      '</ul>' +
+      '<p style="font-size:0.72rem;color:var(--text-muted);margin-top:0.8rem;">Copiați și puneți la câmpul "Investigații" de pe site-ul clinicii, dacă există.</p>' +
+    '</div>' +
+
+    '<div class="card" style="margin-bottom:0.8rem;">' +
+      '<div class="card-label" style="margin-bottom:1rem;">' + (sectorData ? sectorData.label : 'Clinici') + '</div>' +
+      cliniciHtml +
+    '</div>' +
+
+    '<div class="disclaimer"><strong>Notă:</strong> Evaluarea are caracter orientativ și nu constituie un diagnostic medical. TriajMed nu validează nicio clinică. Consultați întotdeauna un medic specialist.</div>';
+}
+
+render();
+</script>
+</body>
+</html>
